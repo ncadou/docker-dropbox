@@ -17,16 +17,10 @@ RUN tar zxf /dropbox.tgz -C /usr/local && \
     ln -s /usr/local/dropbox-dist/dropboxd /usr/local/bin && \
     rm /dropbox.tgz
 
-RUN useradd -m dropbox
-USER dropbox
-ENV HOME /home/dropbox
-WORKDIR /home/dropbox
+ADD init /usr/local/bin/
 
-RUN mkdir -p Dropbox config/dropbox config/dropbox-master && \
-    chown -R dropbox:dropbox Dropbox config && \
-    ln -s config/dropbox .dropbox && \
-    ln -s config/dropbox-master .dropbox-master
+RUN useradd -m dropbox
 
 VOLUME ["/home/dropbox/config", "/home/dropbox/Dropbox"]
 
-CMD ["/usr/local/bin/dropboxd"]
+CMD ["/usr/local/bin/init"]
